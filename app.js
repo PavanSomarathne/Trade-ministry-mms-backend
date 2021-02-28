@@ -6,8 +6,7 @@ var logger = require("morgan");
 const Parsbdy = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+var adminRouter = require("./routes/AdminRoutes");
 
 var app = express();
 require("dotenv").config();
@@ -30,8 +29,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(Parsbdy.json());
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/", adminRouter);
 
 const port = process.env.PORT || 5000;
 const mongouri = process.env.ATLAS_URI;
