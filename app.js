@@ -7,6 +7,8 @@ const Parsbdy = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 var adminRouter = require("./routes/AdminRoutes");
+var userRouter = require("./routes/UserRoutes");
+
 
 var app = express();
 require("dotenv").config();
@@ -24,12 +26,16 @@ app.use(function (req, res, next) {
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(Parsbdy.json());
 
-app.use("/", adminRouter);
+app.use("/admin", adminRouter);
+app.use("/users", userRouter);
+
 
 const port = process.env.PORT || 5000;
 const mongouri = process.env.ATLAS_URI;
