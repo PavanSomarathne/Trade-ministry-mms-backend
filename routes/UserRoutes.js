@@ -4,7 +4,7 @@ const router = express.Router();
 
 const User = require("../schemas/User");
 
-router.post("/register", function (req, res, next) {
+router.post("/register", async function (req, res, next) {
   const validEmail = await User.findOne({ email: req.body.email });
   if (validEmail) {
     return res.json({
