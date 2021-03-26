@@ -1,8 +1,15 @@
 const express = require("express");
 const auth = require("../authentication/Auth");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
+const bodyParser = require("body-parser");
+require("dotenv").config();
 
+//DB models
 const User = require("../schemas/User");
+
+//JWT
+const accessTokenSecret = process.env.TOKEN_SECRET;
 
 router.post("/register", async function (req, res, next) {
   const validEmail = await User.findOne({ email: req.body.email });
@@ -39,6 +46,27 @@ router.delete("/register/:Cid", auth, function (req, res, next) {
   }).then(function (item) {
     res.send(item);
   });
+});
+
+router.post("/login", async function (req, res) {
+  const user = await User.findOne({
+    email: req.body.email,
+    password: req.body.password,
+  });
+
+  if (user) {
+    // Generate an access token
+    const accessToken = jwt.sign(
+      { id: user._id, role: user.utype },
+      accessTokenSecret
+    );
+
+    res.json({
+      accessToken,
+    });
+  } else {
+    res.json({ error: "Username or password incorrect" });
+  }
 });
 
 function genPassword() {
