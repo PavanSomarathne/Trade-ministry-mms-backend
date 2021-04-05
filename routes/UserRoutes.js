@@ -25,6 +25,7 @@ router.post("/register", async function (req, res, next) {
     tel: req.body.tel,
     sector: req.body.sector,
     workplace: req.body.workplace,
+    gender: req.body.gender,
     password: genPassword(),
   })
     .then(function (item) {
@@ -35,6 +36,30 @@ router.post("/register", async function (req, res, next) {
 
 router.get("/register", function (req, res, next) {
   User.find({}).then(function (item) {
+    res.send(item);
+  });
+});
+
+router.get("/register/public", function (req, res, next) {
+  User.find({ sector: "Public" }).then(function (item) {
+    res.send(item);
+  });
+});
+
+router.get("/register/private", function (req, res, next) {
+  User.find({ sector: "Private" }).then(function (item) {
+    res.send(item);
+  });
+});
+
+router.get("/register/association", function (req, res, next) {
+  User.find({ sector: "Association" }).then(function (item) {
+    res.send(item);
+  });
+});
+
+router.get("/register/academic", function (req, res, next) {
+  User.find({ sector: "Academic" }).then(function (item) {
     res.send(item);
   });
 });

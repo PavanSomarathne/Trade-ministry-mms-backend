@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Question = require("../schemas/Question");
-// const auth = require("../Authentication/Auth");
+const auth = require("../Authentication/Auth");
 
 router.post("/new-question", function (req, res, next) {
   Question.create({
@@ -13,7 +13,7 @@ router.post("/new-question", function (req, res, next) {
     .catch(next);
 });
 
-router.get("/questions", function (req, res, next) {
+router.get("/questions", auth, function (req, res, next) {
   Question.find({}).then(function (item) {
     res.send(item);
   });

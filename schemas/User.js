@@ -24,6 +24,10 @@ const RegisterSchema = new Schema({
     type: String,
     required: true,
   },
+  gender: {
+    type: String,
+    required: true,
+  },
   workplace: {
     type: String,
     required: true,
