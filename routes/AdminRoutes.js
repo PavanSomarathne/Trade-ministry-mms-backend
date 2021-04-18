@@ -13,7 +13,7 @@ router.post("/new-question", function (req, res, next) {
     .catch(next);
 });
 
-router.get("/questions", auth, function (req, res, next) {
+router.get("/questions", function (req, res, next) {
   Question.find({}).then(function (item) {
     res.send(item);
   });
