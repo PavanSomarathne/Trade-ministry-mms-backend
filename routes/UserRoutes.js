@@ -94,6 +94,39 @@ router.post("/login", async function (req, res) {
   }
 });
 
+router.get("/stats", async function (req, res, next) {
+  // const { role } = req.user;
+
+  // if (role !== "admin") {
+  //   return res.sendStatus(403);
+  // }
+  let publicCount = 0;
+  let privateCount = 0;
+  let academicCount = 0;
+  let associationCount = 0;
+  publicCount = await User.find({ sector: "Public" }).then(function (item) {
+    return item.length;
+  });
+  privateCount = await User.find({ sector: "Private" }).then(function (item) {
+    return item.length;
+  });
+  academicCount = await User.find({ sector: "Academic" }).then(function (item) {
+    return item.length;
+  });
+  associationCount = await User.find({ sector: "Association" }).then(function (
+    item
+  ) {
+    return item.length;
+  });
+
+  res.json({
+    Public: publicCount,
+    Private: privateCount,
+    Academic: academicCount,
+    Association: associationCount,
+  });
+});
+
 function genPassword() {
   var result = "";
   var characters =
