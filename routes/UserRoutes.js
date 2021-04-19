@@ -4,7 +4,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 require("dotenv").config();
-
+const axios = require("axios");
 //DB models
 const User = require("../schemas/User");
 
@@ -18,6 +18,9 @@ router.post("/register", async function (req, res, next) {
       error: "This Email is already registered in the system",
     });
   }
+
+  const password = genPassword();
+
   User.create({
     utype: req.body.utype,
     name: req.body.name,
@@ -26,12 +29,75 @@ router.post("/register", async function (req, res, next) {
     sector: req.body.sector,
     workplace: req.body.workplace,
     gender: req.body.gender,
-    password: genPassword(),
+    password: password,
   })
     .then(function (item) {
       res.send(item);
     })
     .catch(next);
+
+  axios
+    .post("https://form-to-email-api.herokuapp.com/api/email", {
+      name: "Trade Ministry Sri Lanka",
+      receiver: req.body.email,
+      subject: "Registration Successful! - Trade Ministry MMS",
+      data: [
+        {
+          field:
+            "Hi, " +
+            req.body.name +
+            " you have been regsitered as a " +
+            req.body.utype +
+            "  in Trade Ministry Sri Lanka MMS.",
+          value: "Use the following credentials to login to the System",
+        },
+        {
+          field: "Username :",
+          value: req.body.email,
+        },
+        {
+          field: "password",
+          value: password,
+        },
+        {
+          field: "Thank You!",
+          value: "",
+        },
+      ],
+    })
+    .then((res) => {
+      console.log(`statusCode: ${res.statusCode}`);
+      console.log(res);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+router.get("/email", function (req, res, next) {
+  axios
+    .post("https://form-to-email-api.herokuapp.com/api/email", {
+      name: "PavanS",
+      receiver: "ushansankalpafernando@gmail.com",
+      subject: "Test mail",
+      data: [
+        {
+          field: "Age",
+          value: "21",
+        },
+        {
+          field: "Favourite food",
+          value: "Noodles",
+        },
+      ],
+    })
+    .then((res) => {
+      console.log(`statusCode: ${res.statusCode}`);
+      console.log(res);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
 
 router.get("/register", function (req, res, next) {
