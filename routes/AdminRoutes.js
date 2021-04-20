@@ -3,7 +3,6 @@ const router = express.Router();
 const axios = require("axios");
 const Question = require("../schemas/Question");
 const auth = require("../Authentication/Auth");
-const fetch = require("node-fetch");
 
 router.post("/new-question", function (req, res, next) {
   Question.create({
