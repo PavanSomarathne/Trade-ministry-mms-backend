@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const axios = require("axios");
 const Question = require("../schemas/Question");
 const auth = require("../Authentication/Auth");
 const fetch = require("node-fetch");
@@ -40,21 +41,16 @@ router.delete("/questions", function (req, res, next) {
 });
 
 router.post("/developing-area", function (req, res, next) {
-  let obj = {
-    text: req.body.text,
-  };
-
-  fetch("https://mms-ml.herokuapp.com/api/", {
-    method: "POST",
-    body: JSON.stringify(obj),
-    headers: { "Content-Type": "application/json" },
-  })
-    .then(function (result) {
-      res.send(result);
-      //or possibly res.send(result), depending on what indeed responds with
+  axios
+    .post("https://mms-ml.herokuapp.com/api/", {
+      text: req.body.text,
     })
-    .then((json) => console.log(json))
-    .catch((err) => console.log(err));
+    .then(function (response) {
+      res.send(response.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
 
 module.exports = router;
