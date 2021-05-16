@@ -99,6 +99,11 @@ router.get("/email", function (req, res, next) {
       console.error(error);
     });
 });
+//Forget Password
+router.get("/forget", async function (req, res, next) {
+  const user = User.find({ email: req.body.email });
+  const passNew = genPassword();
+});
 
 router.get("/register", function (req, res, next) {
   User.find({}).then(function (item) {
@@ -126,6 +131,12 @@ router.get("/register/association", function (req, res, next) {
 
 router.get("/register/academic", function (req, res, next) {
   User.find({ sector: "Academic" }).then(function (item) {
+    res.send(item);
+  });
+});
+router.get("/register/:Cid", auth, function (req, res, next) {
+  const userId = req.params.Cid;
+  User.findOne({ _id: userId }).then(function (item) {
     res.send(item);
   });
 });
@@ -160,6 +171,18 @@ router.post("/login", async function (req, res) {
   }
 });
 
+router.put("/nat", function (req, res, next) {
+  User.findByIdAndUpdate(
+    { _id: req.body.id },
+    {
+      nat: req.body.nat,
+    }
+  ).then(function () {
+    User.findOne({ _id: req.body.id }).then(function (single) {
+      res.send(single);
+    });
+  });
+});
 router.get("/stats", async function (req, res, next) {
   // const { role } = req.user;
 

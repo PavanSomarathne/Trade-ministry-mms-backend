@@ -36,6 +36,11 @@ const RegisterSchema = new Schema({
     type: String,
     required: true,
   },
+  nat: [
+    {
+      type: Number,
+    },
+  ],
 });
 
 module.exports = mongoose.model("register", RegisterSchema);
