@@ -36,11 +36,17 @@ const RegisterSchema = new Schema({
     type: String,
     required: true,
   },
-  nat: [
-    {
-      type: Number,
-    },
-  ],
+  nat: {
+    type: [
+      {
+        type: Number,
+      },
+    ],
+    default: [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    ],
+  },
 });
 
 module.exports = mongoose.model("register", RegisterSchema);

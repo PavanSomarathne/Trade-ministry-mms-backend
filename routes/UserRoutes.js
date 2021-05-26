@@ -111,6 +111,14 @@ router.get("/register", function (req, res, next) {
   });
 });
 
+router.get("/usersnat", function (req, res, next) {
+  User.find({})
+    .select("_id name sector nat")
+    .then(function (item) {
+      res.send(item);
+    });
+});
+
 router.get("/register/public", function (req, res, next) {
   User.find({ sector: "Public" }).then(function (item) {
     res.send(item);
