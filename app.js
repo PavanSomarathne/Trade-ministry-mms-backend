@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 var adminRouter = require("./routes/AdminRoutes");
 var userRouter = require("./routes/UserRoutes");
-
+var eventRouter = require("./routes/EventRoutes");
 var app = express();
 require("dotenv").config();
 
@@ -36,6 +36,7 @@ app.use(Parsbdy.json());
 
 app.use("/admin", adminRouter);
 app.use("/users", userRouter);
+app.use("/events", eventRouter);
 
 const port = process.env.PORT || 5000;
 const mongouri = process.env.ATLAS_URI;
