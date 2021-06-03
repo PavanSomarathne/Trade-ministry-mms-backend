@@ -99,6 +99,7 @@ router.get("/email", function (req, res, next) {
       console.error(error);
     });
 });
+
 //Forget Password
 router.get("/forget", async function (req, res, next) {
   const user = User.find({ email: req.body.email });
@@ -149,10 +150,9 @@ router.get("/register/:Cid", auth, function (req, res, next) {
   });
 });
 
-router.delete("/register/:Cid", auth, function (req, res, next) {
-  const customerId = req.params.Cid;
+router.delete("/delete", auth, function (req, res, next) {
   User.findByIdAndRemove({
-    _id: customerId,
+    _id: req.body.id,
   }).then(function (item) {
     res.send(item);
   });
