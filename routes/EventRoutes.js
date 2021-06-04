@@ -19,11 +19,11 @@ router.post("/new", function (req, res, next) {
     .catch(next);
 });
 
-// router.get("/questions", function (req, res, next) {
-//   Question.find({}).then(function (item) {
-//     res.send(item);
-//   });
-// });
+router.get("/all", function (req, res, next) {
+  Event.find({}).then(function (item) {
+    res.send(item);
+  });
+});
 
 // router.put("/questions", function (req, res, next) {
 //   Question.findByIdAndUpdate(
