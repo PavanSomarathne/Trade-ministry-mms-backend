@@ -71,6 +71,19 @@ const minute = new Schema({
   meeting_activities: [
     { activity: String, action: String, responsibility: String },
   ],
+  meeting_activities_each: [
+    {
+      userID: String,
+      tableData: [
+        {
+          activity: String,
+          action: String,
+          responsibility: String,
+          rating: Number,
+        },
+      ],
+    },
+  ],
   meeting_remarks: {
     type: String,
   },
