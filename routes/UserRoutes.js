@@ -4,6 +4,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 require("dotenv").config();
+const fs = require("fs");
 const axios = require("axios");
 //DB models
 const User = require("../schemas/User");
@@ -234,4 +235,78 @@ function genPassword() {
   }
   return result;
 }
+//User image upload
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+
+const Imagfilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const ImageUpload = multer({
+  storage: storage,
+  limits: { fileSize: 8194304 },
+  fileFilter: Imagfilter,
+});
+router.put(
+  "/user-image",
+  ImageUpload.fields([{ name: "userImg", maxCount: 1 }]),
+  (req, res, next) => {
+    //   console.log(req.file.path.replace("\\", "/"));
+    // console.log(req.body);
+    // sp = new User({
+    //   _id: req.body.userID,
+    //   userImage: req.files["userImage"][0].path.replace("\\", "/"),
+    // });
+
+    User.findByIdAndUpdate(
+      { _id:req.body.userID },
+      {
+        userImage: req.files["userImg"][0].path.replace("\\", "/"),
+      }
+    ).then(function () {
+      User.findOne({ _id: req.body.userID }).then(function (single) {
+        res.send(single);
+      });
+    }).catch((error) => {
+        res.send(error);
+        console.log(error);
+      });;
+
+    // sp.save()
+    //   .then((single) => {
+    //     console.log(single);
+    //     res.status(201).json(single);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     res.status(500).json({
+    //       error: err,
+    //     });
+    //   });
+    // .then((item) => {
+    //   res.send({ name: "name" });
+    // })
+    // .catch((error) => {
+    //   res.send(error);
+    // });
+  }
+);
+
 module.exports = router;

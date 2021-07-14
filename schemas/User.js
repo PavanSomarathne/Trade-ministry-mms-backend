@@ -36,6 +36,9 @@ const RegisterSchema = new Schema({
     type: String,
     required: true,
   },
+  userImage: {
+    type: String,
+  },
   nat: {
     type: [
       {
