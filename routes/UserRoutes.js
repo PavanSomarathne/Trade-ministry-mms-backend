@@ -268,45 +268,48 @@ router.put(
   "/user-image",
   ImageUpload.fields([{ name: "userImg", maxCount: 1 }]),
   (req, res, next) => {
-    //   console.log(req.file.path.replace("\\", "/"));
-    // console.log(req.body);
-    // sp = new User({
-    //   _id: req.body.userID,
-    //   userImage: req.files["userImage"][0].path.replace("\\", "/"),
-    // });
-
+    if (req.body.previousImg != "") {
+      console.log("./" + req.body.previousImg);
+      fs.unlink("./" + req.body.previousImg, function (res) {
+        console.log("Previous image deleted");
+      });
+    }
     User.findByIdAndUpdate(
-      { _id:req.body.userID },
+      { _id: req.body.userID },
       {
         userImage: req.files["userImg"][0].path.replace("\\", "/"),
       }
-    ).then(function () {
-      User.findOne({ _id: req.body.userID }).then(function (single) {
-        res.send(single);
-      });
-    }).catch((error) => {
+    )
+      .then(function () {
+        User.findOne({ _id: req.body.userID }).then(function (single) {
+          res.setTimeout(1500, function () {
+            res.send(single);
+          });
+        });
+      })
+      .catch((error) => {
         res.send(error);
         console.log(error);
-      });;
-
-    // sp.save()
-    //   .then((single) => {
-    //     console.log(single);
-    //     res.status(201).json(single);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     res.status(500).json({
-    //       error: err,
-    //     });
-    //   });
-    // .then((item) => {
-    //   res.send({ name: "name" });
-    // })
-    // .catch((error) => {
-    //   res.send(error);
-    // });
+      });
   }
 );
+//user profile update
+router.put("/register", function (req, res, next) {
+  User.findByIdAndUpdate(
+    { _id: req.body.id },
+    {
+      name: req.body.name,
+      email: req.body.email,
+      tel: req.body.tel,
+      sector: req.body.sector,
+      workplace: req.body.workplace,
+      password: req.body.password,
+    }
+  ).then(function () {
+    User.findOne({ _id: req.body.id }).then(function (single) {
+      res.send(single);
+    });
+  });
+});
 
 module.exports = router;

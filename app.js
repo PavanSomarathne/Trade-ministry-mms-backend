@@ -31,7 +31,7 @@ app.use(
   })
 );
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(__dirname + "/uploads"));
 app.use(Parsbdy.json());
 
 app.use("/admin", adminRouter);
