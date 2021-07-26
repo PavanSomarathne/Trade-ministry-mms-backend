@@ -12,6 +12,7 @@ router.post("/new", function (req, res, next) {
     location: req.body.location,
     time: req.body.time,
     members: req.body.members,
+    questions: req.body.questions,
   })
     .then(function (item) {
       res.send(item);
@@ -20,7 +21,7 @@ router.post("/new", function (req, res, next) {
 });
 
 router.get("/all", function (req, res, next) {
-  Event.find({}).then(function (item) {
+  Event.find({}, {}, { sort: { _id: -1 } }).then(function (item) {
     res.send(item);
   });
 });

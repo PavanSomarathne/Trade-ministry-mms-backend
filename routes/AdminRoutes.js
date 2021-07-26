@@ -39,6 +39,12 @@ router.delete("/questions", function (req, res, next) {
     res.send(item);
   });
 });
+router.delete("/questions-all", function (req, res, next) {
+  // db.orders.deleteMany( { "client" : "Crude Traders Inc." } );
+  Question.deleteMany({}).then(function (item) {
+    res.send(item);
+  });
+});
 
 router.post("/developing-area", function (req, res, next) {
   axios
@@ -81,7 +87,7 @@ router.post("/new-minute", function (req, res, next) {
 });
 
 router.get("/minutes", function (req, res, next) {
-  Minute.find({}).then(function (item) {
+  Minute.find({}, {}, { sort: { _id: -1 } }).then(function (item){
     res.send(item);
   });
 });
