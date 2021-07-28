@@ -12,6 +12,7 @@ router.post("/new", function (req, res, next) {
     location: req.body.location,
     time: req.body.time,
     members: req.body.members,
+    date: req.body.date,
     questions: req.body.questions,
   })
     .then(function (item) {

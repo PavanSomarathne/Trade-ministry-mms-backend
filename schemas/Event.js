@@ -15,8 +15,10 @@ const event = new Schema({
   members: {
     type: [{}],
   },
-  questions:[{}],
-  
+  questions: [{}],
+  date: {
+    type: String,
+  },
 });
 
 const Event = mongoose.model("events", event);
