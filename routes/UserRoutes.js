@@ -8,7 +8,7 @@ const fs = require("fs");
 const axios = require("axios");
 //DB models
 const User = require("../schemas/User");
-
+const Event = require("../schemas/Event");
 //JWT
 const accessTokenSecret = process.env.TOKEN_SECRET;
 
@@ -111,6 +111,22 @@ router.get("/register", function (req, res, next) {
   User.find({}).then(function (item) {
     res.send(item);
   });
+});
+
+router.post("/getMeetings", function (req, res, next) {
+  console.log("getnot called" + req.body.id);
+  if (!req.body.id) {
+    return res.json({error:"No ID"});
+  }
+  Event.find({
+    members: {
+      $elemMatch: { _id: req.body.id },
+    },
+  })
+    .select("name time date")
+    .then(function (item) {
+      res.send(item);
+    });
 });
 
 router.get("/usersnat", function (req, res, next) {
