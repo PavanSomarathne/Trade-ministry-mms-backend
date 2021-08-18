@@ -116,7 +116,7 @@ router.get("/register", function (req, res, next) {
 router.post("/getMeetings", function (req, res, next) {
   console.log("getnot called" + req.body.id);
   if (!req.body.id) {
-    return res.json({error:"No ID"});
+    return res.json({ error: "No ID" });
   }
   Event.find({
     members: {
@@ -131,7 +131,7 @@ router.post("/getMeetings", function (req, res, next) {
 
 router.get("/usersnat", function (req, res, next) {
   User.find({})
-    .select("_id name sector nat")
+    .select("_id name email sector nat")
     .then(function (item) {
       res.send(item);
     });

@@ -16,6 +16,17 @@ router.post("/new", function (req, res, next) {
     questions: req.body.questions,
   })
     .then(function (item) {
+      req.body.members.map((i) => {
+        sendEventNotification(
+          i.name,
+          i.email,
+          req.body.date,
+          req.body.time,
+          req.body.venue,
+          req.body.location,
+          req.body.name
+        );
+      });
       res.send(item);
     })
     .catch(next);
@@ -27,36 +38,57 @@ router.get("/all", function (req, res, next) {
   });
 });
 
-// router.put("/questions", function (req, res, next) {
-//   Question.findByIdAndUpdate(
-//     { _id: req.body.id },
-//     {
-//       body: req.body.message,
-//     }
-//   ).then(function () {
-//     Question.findOne({ _id: req.body.id }).then(function (single) {
-//       res.send(single);
-//     });
-//   });
-// });
+function sendEventNotification(
+  userName,
+  email,
+  date,
+  time,
+  location,
+  locationUrl,
+  meeting
+) {
+  console.log("send email" + email);
+  axios
+    .post("https://form-to-email-api.herokuapp.com/api/email", {
+      name: "Trade Ministry Sri Lanka",
+      receiver: email,
+      subject: "You have an Upcoming Meeting",
+      data: [
+        {
+          field: "Dear " + userName + " ,",
+          value:
+            "You Have been assigned to a meeting, Meeting Details are following",
+        },
+        {
+          field: "Meeting Topic : " + meeting,
+          value:
+            "Date : " +
+            date +
+            "<br/>" +
+            "Time : " +
+            time +
+            "<br/>" +
+            "Venue : " +
+            location,
+        },
 
-// router.delete("/questions", function (req, res, next) {
-//   Question.findByIdAndRemove({ _id: req.body.id }).then(function (item) {
-//     res.send(item);
-//   });
-// });
-
-// router.post("/developing-area", function (req, res, next) {
-//   axios
-//     .post("https://mms-ml.herokuapp.com/api/", {
-//       text: req.body.text,
-//     })
-//     .then(function (response) {
-//       res.send(response.data);
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// });
+        {
+          field: "Navigate With Google Maps ",
+          value: '<a href="' + locationUrl + '"> Click Here </a>',
+        },
+        {
+          field: "Thank You!",
+          value: "This is System Generated Email Please Don't Reply!",
+        },
+      ],
+    })
+    .then((res) => {
+      console.log(`statusCode: ${res.statusCode}`);
+      // console.log(res);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
 
 module.exports = router;
