@@ -131,7 +131,7 @@ router.post("/getMeetings", function (req, res, next) {
 
 router.get("/usersnat", function (req, res, next) {
   User.find({})
-    .select("_id name email sector nat")
+    .select("_id name email sector nat userImage")
     .then(function (item) {
       res.send(item);
     });
