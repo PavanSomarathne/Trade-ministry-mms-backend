@@ -102,9 +102,39 @@ router.get("/email", function (req, res, next) {
 });
 
 //Forget Password
-router.get("/forget", async function (req, res, next) {
-  const user = User.find({ email: req.body.email });
+router.post("/forget", async function (req, res, next) {
+  // const user = User.findOneAndUpdate({ email: req.body.email });
   const passNew = genPassword();
+  User.findOneAndUpdate(
+    { email: req.body.email },
+    { $set: { password: passNew } }
+  ).then((user) => {
+    res.json(user);
+  });
+
+  axios
+    .post("https://form-to-email-api.herokuapp.com/api/email", {
+      name: "Trade Ministry Sri Lanka",
+      receiver: req.body.email,
+      subject: "Your Password Has been reset",
+      data: [
+        {
+          field: "Use Your New Password to login to the system",
+          value: passNew,
+        },
+        {
+          field: "Thank You!",
+          value: "This is System Generated Email Please Do not Reply",
+        },
+      ],
+    })
+    .then((res) => {
+      console.log(`statusCode: ${res.statusCode}`);
+      console.log(res);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
 
 router.get("/register", function (req, res, next) {
