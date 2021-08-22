@@ -358,4 +358,13 @@ router.put("/register", function (req, res, next) {
   });
 });
 
+//Find user id from name
+router.post("/register/user", function (req, res, next) {
+
+  User.find({ _id: req.body.id }).then(function (item) {
+    res.send(item);
+  });
+});
+
+
 module.exports = router;
