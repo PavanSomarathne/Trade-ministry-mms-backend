@@ -161,7 +161,7 @@ router.post("/getMeetings", function (req, res, next) {
 
 router.get("/usersnat", function (req, res, next) {
   User.find({})
-    .select("_id name email sector nat utype")
+    .select("_id name email sector nat utype userImage")
     .then(function (item) {
       res.send(item);
     });
@@ -355,6 +355,13 @@ router.put("/register", function (req, res, next) {
     User.findOne({ _id: req.body.id }).then(function (single) {
       res.send(single);
     });
+  });
+});
+
+//Find user id from name
+router.post("/register/user", function (req, res, next) {
+  User.find({ _id: req.body.id }).then(function (item) {
+    res.send(item);
   });
 });
 
