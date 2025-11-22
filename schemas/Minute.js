@@ -19,6 +19,9 @@ const minute = new Schema({
     type: String,
     required: true,
   },
+  sector: {
+    type: String,
+  },
   present_private: [
     {
       type: String,

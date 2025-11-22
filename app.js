@@ -51,6 +51,11 @@ mongoose
   })
   .catch((err) => console.log(err));
 
+app.get("/", (req, res) => {
+  res.json({ message: "Server is running successfully 🚀" });
+});
+
+
 //custom error handling
 app.use((req, res, next) => {
   if (req.file) {
